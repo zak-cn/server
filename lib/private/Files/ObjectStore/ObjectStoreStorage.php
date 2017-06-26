@@ -28,6 +28,7 @@ namespace OC\Files\ObjectStore;
 use Icewind\Streams\CallbackWrapper;
 use Icewind\Streams\IteratorDirectory;
 use OC\Files\Cache\CacheEntry;
+use OCP\Files\NotFoundException;
 use OCP\Files\ObjectStore\IObjectStore;
 
 class ObjectStoreStorage extends \OC\Files\Storage\Common {
@@ -308,7 +309,15 @@ class ObjectStoreStorage extends \OC\Files\Storage\Common {
 		$source = $this->normalizePath($source);
 		$target = $this->normalizePath($target);
 		$this->remove($target);
+		$fileId = $this->getCache()->getId($source);
 		$this->getCache()->move($source, $target);
+		$fileId2 = $this->getCache()->getId($target);
+		if ($fileId2 < 0) {
+			\OC::$server->getLogger()->error('file not found by path after rename (' . $source . '->' . $target . ')');
+		}
+		if ($fileId2 !== $fileId) {
+			\OC::$server->getLogger()->error('different fileid after renaming (' . $source . '->' . $target . ') got ' . $fileId2 . ' expected ' . $fileId);
+		}
 		$this->touch(dirname($target));
 		return true;
 	}
