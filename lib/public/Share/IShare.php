@@ -172,7 +172,7 @@ interface IShare {
 	 *
 	 * @param string $displayName
 	 * @return \OCP\Share\IShare The modified object
-	 * @since 9.0.0
+	 * @since 13.0.0
 	 */
 	public function setSharedWithDisplayName($displayName);
 
@@ -180,7 +180,7 @@ interface IShare {
 	 * Get the display name of the receiver of this share.
 	 *
 	 * @return string
-	 * @since 9.0.0
+	 * @since 13.0.0
 	 */
 	public function getSharedWithDisplayName();
 
@@ -189,7 +189,7 @@ interface IShare {
 	 *
 	 * @param string $src
 	 * @return \OCP\Share\IShare The modified object
-	 * @since 9.0.0
+	 * @since 13.0.0
 	 */
 	public function setSharedWithAvatar($src);
 
@@ -197,7 +197,7 @@ interface IShare {
 	 * Get the display name of the receiver of this share.
 	 *
 	 * @return string
-	 * @since 9.0.0
+	 * @since 13.0.0
 	 */
 	public function getSharedWithAvatar();
 
