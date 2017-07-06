@@ -105,6 +105,69 @@ class FilesAppContext implements Context, ActorAwareInterface {
 	/**
 	 * @return Locator
 	 */
+	public static function fileDetailsInCurrentSectionDetailsViewWithText($fileDetailsText) {
+		return Locator::forThe()->xpath("//span[normalize-space() = '$fileDetailsText']")->
+				descendantOf(self::fileDetailsInCurrentSectionDetailsView())->
+				describedAs("File details with text \"$fileDetailsText\" in current section details view in Files app");
+	}
+
+	/**
+	 * @return Locator
+	 */
+	private static function fileDetailsInCurrentSectionDetailsView() {
+		return Locator::forThe()->css(".file-details")->
+				descendantOf(self::currentSectionDetailsView())->
+				describedAs("File details in current section details view in Files app");
+	}
+
+	/**
+	 * @return Locator
+	 */
+	public static function inputFieldForTagsInCurrentSectionDetails() {
+		return Locator::forThe()->css(".systemTagsInfoView")->
+				descendantOf(self::currentSectionDetailsView())->
+				describedAs("Input field for tags in current section details view in Files app");
+	}
+
+	/**
+	 * @return Locator
+	 */
+	public static function tabHeaderInCurrentSectionDetailsViewNamed($tabHeaderName) {
+		return Locator::forThe()->xpath("//li[normalize-space() = '$tabHeaderName']")->
+				descendantOf(self::tabHeadersInCurrentSectionDetailsView())->
+				describedAs("Tab header named $tabHeaderName in current section details view in Files app");
+	}
+
+	/**
+	 * @return Locator
+	 */
+	private static function tabHeadersInCurrentSectionDetailsView() {
+		return Locator::forThe()->css(".tabHeaders")->
+				descendantOf(self::currentSectionDetailsView())->
+				describedAs("Tab headers in current section details view in Files app");
+	}
+
+	/**
+	 * @return Locator
+	 */
+	public static function tabInCurrentSectionDetailsViewNamed($tabName) {
+		return Locator::forThe()->xpath("//div[@id=//*[contains(concat(' ', normalize-space(@class), ' '), ' tabHeader ') and normalize-space() = '$tabName']/@data-tabid]")->
+				descendantOf(self::currentSectionDetailsView())->
+				describedAs("Tab named $tabName in current section details view in Files app");
+	}
+
+	/**
+	 * @return Locator
+	 */
+	public static function loadingIconForTabInCurrentSectionDetailsViewNamed($tabName) {
+		return Locator::forThe()->css(".loading")->
+				descendantOf(self::tabInCurrentSectionDetailsViewNamed($tabName))->
+				describedAs("Loading icon for tab named $tabName in current section details view in Files app");
+	}
+
+	/**
+	 * @return Locator
+	 */
 	public static function shareLinkCheckbox() {
 		// forThe()->checkbox("Share link") can not be used here; that would
 		// return the checkbox itself, but the element that the user interacts
@@ -153,6 +216,40 @@ class FilesAppContext implements Context, ActorAwareInterface {
 	/**
 	 * @return Locator
 	 */
+	public static function createMenuButton() {
+		return Locator::forThe()->css("#controls .button.new")->
+				descendantOf(self::currentSectionMainView())->
+				describedAs("Create menu button in Files app");
+	}
+
+	/**
+	 * @return Locator
+	 */
+	public static function createNewFolderMenuItem() {
+		return self::createMenuItemFor("New folder");
+	}
+
+	/**
+	 * @return Locator
+	 */
+	public static function createNewFolderMenuItemNameInput() {
+		return Locator::forThe()->css(".filenameform input")->
+				descendantOf(self::createNewFolderMenuItem())->
+				describedAs("Name input in create new folder menu item in Files app");
+	}
+
+	/**
+	 * @return Locator
+	 */
+	private static function createMenuItemFor($newType) {
+		return Locator::forThe()->xpath("//div[contains(concat(' ', normalize-space(@class), ' '), ' newFileMenu ')]//span[normalize-space() = '$newType']/ancestor::li")->
+				descendantOf(self::currentSectionMainView())->
+				describedAs("Create $newType menu item in Files app");
+	}
+
+	/**
+	 * @return Locator
+	 */
 	public static function rowForFile($fileName) {
 		return Locator::forThe()->xpath("//*[@id = 'fileList']//span[contains(concat(' ', normalize-space(@class), ' '), ' nametext ') and normalize-space() = '$fileName']/ancestor::tr")->
 				descendantOf(self::currentSectionMainView())->
@@ -162,9 +259,26 @@ class FilesAppContext implements Context, ActorAwareInterface {
 	/**
 	 * @return Locator
 	 */
+	public static function rowForFilePreceding($fileName1, $fileName2) {
+		return Locator::forThe()->xpath("//preceding-sibling::tr//span[contains(concat(' ', normalize-space(@class), ' '), ' nametext ') and normalize-space() = '$fileName1']/ancestor::tr")->
+				descendantOf(self::rowForFile($fileName2))->
+				describedAs("Row for file $fileName1 preceding $fileName2 in Files app");
+	}
+
+	/**
+	 * @return Locator
+	 */
 	public static function favoriteActionForFile($fileName) {
 		return Locator::forThe()->css(".action-favorite")->descendantOf(self::rowForFile($fileName))->
 				describedAs("Favorite action for file $fileName in Files app");
+	}
+
+	/**
+	 * @return Locator
+	 */
+	public static function notFavoritedStateIconForFile($fileName) {
+		return Locator::forThe()->css(".icon-star")->descendantOf(self::favoriteActionForFile($fileName))->
+				describedAs("Not favorited state icon for file $fileName in Files app");
 	}
 
 	/**
@@ -231,6 +345,16 @@ class FilesAppContext implements Context, ActorAwareInterface {
 	}
 
 	/**
+	 * @Given I create a new folder named :folderName
+	 */
+	public function iCreateANewFolderNamed($folderName) {
+		$this->actor->find(self::createMenuButton(), 10)->click();
+
+		$this->actor->find(self::createNewFolderMenuItem(), 2)->click();
+		$this->actor->find(self::createNewFolderMenuItemNameInput(), 2)->setValue($folderName . "\r");
+	}
+
+	/**
 	 * @Given I open the :section section
 	 */
 	public function iOpenTheSection($section) {
@@ -247,9 +371,34 @@ class FilesAppContext implements Context, ActorAwareInterface {
 	}
 
 	/**
+	 * @Given I open the input field for tags in the details view
+	 */
+	public function iOpenTheInputFieldForTagsInTheDetailsView() {
+		$this->actor->find(self::fileDetailsInCurrentSectionDetailsViewWithText("Tags"), 10)->click();
+	}
+
+	/**
+	 * @Given I open the :tabName tab in the details view
+	 */
+	public function iOpenTheTabInTheDetailsView($tabName) {
+		$this->actor->find(self::tabHeaderInCurrentSectionDetailsViewNamed($tabName), 10)->click();
+	}
+
+	/**
 	 * @Given I mark :fileName as favorite
 	 */
 	public function iMarkAsFavorite($fileName) {
+		$this->iSeeThatIsNotMarkedAsFavorite($fileName);
+
+		$this->actor->find(self::favoriteActionForFile($fileName), 10)->click();
+	}
+
+	/**
+	 * @Given I unmark :fileName as favorite
+	 */
+	public function iUnmarkAsFavorite($fileName) {
+		$this->iSeeThatIsMarkedAsFavorite($fileName);
+
 		$this->actor->find(self::favoriteActionForFile($fileName), 10)->click();
 	}
 
@@ -337,10 +486,41 @@ class FilesAppContext implements Context, ActorAwareInterface {
 	}
 
 	/**
+	 * @Then I see that :fileName1 precedes :fileName2 in the file list
+	 */
+	public function iSeeThatPrecedesInTheFileList($fileName1, $fileName2) {
+		PHPUnit_Framework_Assert::assertNotNull($this->actor->find(self::rowForFilePreceding($fileName1, $fileName2), 10));
+	}
+
+	/**
 	 * @Then I see that :fileName is marked as favorite
 	 */
 	public function iSeeThatIsMarkedAsFavorite($fileName) {
 		PHPUnit_Framework_Assert::assertNotNull($this->actor->find(self::favoritedStateIconForFile($fileName), 10));
+	}
+
+	/**
+	 * @Then I see that :fileName is not marked as favorite
+	 */
+	public function iSeeThatIsNotMarkedAsFavorite($fileName) {
+		PHPUnit_Framework_Assert::assertNotNull($this->actor->find(self::notFavoritedStateIconForFile($fileName), 10));
+	}
+
+	/**
+	 * @Then I see that the input field for tags in the details view is shown
+	 */
+	public function iSeeThatTheInputFieldForTagsInTheDetailsViewIsShown() {
+		PHPUnit_Framework_Assert::assertTrue(
+				$this->actor->find(self::inputFieldForTagsInCurrentSectionDetails(), 10)->isVisible());
+	}
+
+	/**
+	 * @When I see that the :tabName tab in the details view is eventually loaded
+	 */
+	public function iSeeThatTheTabInTheDetailsViewIsEventuallyLoaded($tabName) {
+		if (!$this->waitForElementToBeEventuallyNotShown(self::loadingIconForTabInCurrentSectionDetailsViewNamed($tabName), $timeout = 10)) {
+			PHPUnit_Framework_Assert::fail("The $tabName tab in the details view has not been loaded after $timeout seconds");
+		}
 	}
 
 	/**
@@ -354,20 +534,7 @@ class FilesAppContext implements Context, ActorAwareInterface {
 	 * @Then I see that the working icon for password protect is eventually not shown
 	 */
 	public function iSeeThatTheWorkingIconForPasswordProtectIsEventuallyNotShown() {
-		$timeout = 10;
-		$timeoutStep = 1;
-
-		$actor = $this->actor;
-		$passwordProtectWorkingIcon = self::passwordProtectWorkingIcon();
-
-		$workingIconNotFoundCallback = function() use ($actor, $passwordProtectWorkingIcon) {
-			try {
-				return !$actor->find($passwordProtectWorkingIcon)->isVisible();
-			} catch (NoSuchElementException $exception) {
-				return true;
-			}
-		};
-		if (!Utils::waitFor($workingIconNotFoundCallback, $timeout, $timeoutStep)) {
+		if (!$this->waitForElementToBeEventuallyNotShown(self::passwordProtectWorkingIcon(), $timeout = 10)) {
 			PHPUnit_Framework_Assert::fail("The working icon for password protect is still shown after $timeout seconds");
 		}
 	}
@@ -382,4 +549,17 @@ class FilesAppContext implements Context, ActorAwareInterface {
 		$this->iSeeThatTheWorkingIconForPasswordProtectIsEventuallyNotShown();
 	}
 
+	private function waitForElementToBeEventuallyNotShown($elementLocator, $timeout = 10, $timeoutStep = 1) {
+		$actor = $this->actor;
+
+		$elementNotFoundCallback = function() use ($actor, $elementLocator) {
+			try {
+				return !$actor->find($elementLocator)->isVisible();
+			} catch (NoSuchElementException $exception) {
+				return true;
+			}
+		};
+
+		return Utils::waitFor($elementNotFoundCallback, $timeout, $timeoutStep);
+	}
 }

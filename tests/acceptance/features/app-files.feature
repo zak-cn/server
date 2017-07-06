@@ -52,3 +52,38 @@ Feature: app-files
     And I authenticate with password "fedcba"
     Then I see that the current page is the Authenticate page for the shared link I wrote down
     And I see that a wrong password for the shared file message is shown
+
+  Scenario: show the input field for tags in the details view
+    Given I am logged in
+    And I open the details view for "welcome.txt"
+    And I see that the details view for "All files" section is open
+    When I open the input field for tags in the details view
+    Then I see that the input field for tags in the details view is shown
+
+  Scenario: show the input field for tags in the details view after the sharing tab has loaded
+    Given I am logged in
+    And I open the details view for "welcome.txt"
+    And I see that the details view for "All files" section is open
+    And I open the "Sharing" tab in the details view
+    And I see that the "Sharing" tab in the details view is eventually loaded
+    When I open the input field for tags in the details view
+    Then I see that the input field for tags in the details view is shown
+
+  Scenario: marking a file as favorite causes the file list to be sorted again
+    Given I am logged in
+    And I create a new folder named "A name alphabetically lower than welcome.txt"
+    And I see that "A name alphabetically lower than welcome.txt" precedes "welcome.txt" in the file list
+    When I mark "welcome.txt" as favorite
+    Then I see that "welcome.txt" is marked as favorite
+    And I see that "welcome.txt" precedes "A name alphabetically lower than welcome.txt" in the file list
+
+  Scenario: unmarking a file as favorite causes the file list to be sorted again
+    Given I am logged in
+    And I create a new folder named "A name alphabetically lower than welcome.txt"
+    And I see that "A name alphabetically lower than welcome.txt" precedes "welcome.txt" in the file list
+    And I mark "welcome.txt" as favorite
+    And I see that "welcome.txt" is marked as favorite
+    And I see that "welcome.txt" precedes "A name alphabetically lower than welcome.txt" in the file list
+    When I unmark "welcome.txt" as favorite
+    Then I see that "welcome.txt" is not marked as favorite
+    And I see that "A name alphabetically lower than welcome.txt" precedes "welcome.txt" in the file list
