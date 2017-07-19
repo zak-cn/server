@@ -68,7 +68,7 @@ class OC_L10N_String implements JsonSerializable {
 		}
 
 		// Replace %n first (won't interfere with vsprintf)
-		$text = str_replace('%n', $this->count, $text);
+		$text = str_replace('%n', (string)$this->count, $text);
 		return vsprintf($text, $this->parameters);
 	}
 
