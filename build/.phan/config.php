@@ -87,6 +87,10 @@ return [
 		'apps/files/templates/',
 		'apps/federatedfilesharing/templates/',
 		'apps/encryption/templates/',
+		'apps/oauth2/templates/',
+		'apps/workflowengine/templates/',
+		'apps/federation/templates/',
+		'apps/dav/templates',
 	],
 
 	// A file list that defines files that will be excluded
