@@ -105,6 +105,8 @@ return [
 		'settings/ajax/disableapp.php',
 		'core/register_command.php',
 		'apps/testing/appinfo/routes.php',
+		'ocs/routes.php',
+		'ocs/v1.php',
 	],
 
 
