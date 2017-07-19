@@ -107,6 +107,7 @@ return [
 		'apps/testing/appinfo/routes.php',
 		'ocs/routes.php',
 		'ocs/v1.php',
+		'core/routes.php',
 	],
 
 
@@ -146,7 +147,6 @@ return [
 	// (E.g. allows specifying desired lists of subclasses,
 	//  or to indicate a preference for non-nullable types over nullable types)
 	// Affects analysis of the body of the method and the param types passed in by callers.
-
 	'prefer_narrowed_phpdoc_param_type' => true,
 
 	// (*Requires check_docblock_signature_return_type_match to be true*)
