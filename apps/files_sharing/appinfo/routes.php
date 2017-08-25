@@ -66,6 +66,11 @@ $application->registerRoutes($this, [
 			'verb' => 'POST',
 		],
 		[
+			'name' => 'ShareAPI#resendMailNotification',
+			'url'  => '/api/v1/shares/{id}/resendMailNotification',
+			'verb' => 'POST',
+		],
+		[
 			'name' => 'ShareAPI#getShare',
 			'url'  => '/api/v1/shares/{id}',
 			'verb' => 'GET',
