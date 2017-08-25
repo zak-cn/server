@@ -1,4 +1,5 @@
 # the default generated dir + db file
+translationfiles
 /data
 /owncloud
 /config/config.php
