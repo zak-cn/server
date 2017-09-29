@@ -639,6 +639,7 @@ class ShareesAPIController extends OCSController {
 									'value' => [
 										'shareType' => Share::SHARE_TYPE_USER,
 										'shareWith' => $cloud->getUser(),
+										'hasEmailAddress' => true,
 									],
 								];
 							}
@@ -658,6 +659,7 @@ class ShareesAPIController extends OCSController {
 									'value' => [
 										'shareType' => Share::SHARE_TYPE_USER,
 										'shareWith' => $cloud->getUser(),
+										'hasEmailAddress' => true,
 									],
 								];
 							}
