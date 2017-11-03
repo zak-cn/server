@@ -75,7 +75,7 @@
 
 /* override styles for login screen in guest.css */
 #header .logo {
-	background-image: url(#{$image-logo});
+	// background-image: url(#{$image-logo}); // needs to be disabled when not themed
 	@if $theming-logo-mime != '' {
 		background-size: contain;
 	}
