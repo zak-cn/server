@@ -31,8 +31,7 @@
 		'<div class="loading hidden" style="height: 50px"></div>';
 
 	var TEMPLATE_SHARE_INFO =
-		'<span class="icon icon-info shareWithRemoteInfo hasTooltip" ' +
-		'title="{{tooltip}}"></span>';
+		'<span class="icon icon-confirm shareWithRemoteInfo"></span>';
 
 	/**
 	 * @class OCA.Share.ShareDialogView

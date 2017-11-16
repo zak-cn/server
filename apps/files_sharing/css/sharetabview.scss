@@ -18,8 +18,16 @@
 .shareTabView .linkPass .icon-loading-small {
 	position: absolute;
 	right: -7px;
-	top: -4px;
+	top: -2px;
 	padding: 14px;
+}
+
+.shareTabView .shareWithRemoteInfo {
+	opacity: .5;
+}
+
+.shareTabView .shareWithField:focus ~ .shareWithRemoteInfo {
+	opacity: 1;
 }
 
 .shareTabView .linkMore {
