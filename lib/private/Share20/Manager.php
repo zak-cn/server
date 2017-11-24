@@ -729,12 +729,14 @@ class Manager implements IManager {
 	public function resendMailNotification(\OCP\Share\IShare $share) {
 		$this->canShare($share);
 
-		if ($share->getShareType() !== \OCP\Share::SHARE_TYPE_USER) {
-			throw new \InvalidArgumentException("Share mail notification can be sent only for user shares");
+		if ($share->getShareType() === \OCP\Share::SHARE_TYPE_USER) {
+			$user = $this->userManager->get($share->getSharedWith());
+			$emailAddress = $user->getEMailAddress();
+		} else if ($share->getShareType() === \OCP\Share::SHARE_TYPE_EMAIL) {
+			$emailAddress = $share->getSharedWith();
+		} else {
+			throw new \InvalidArgumentException("Share mail notification can be sent only for user and mail shares");
 		}
-
-		$user = $this->userManager->get($share->getSharedWith());
-		$emailAddress = $user->getEMailAddress();
 
 		if ($emailAddress === null || $emailAddress === '') {
 			throw new \InvalidArgumentException("Share mail notification can not be sent to a user without a mail");

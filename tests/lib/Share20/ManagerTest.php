@@ -2116,22 +2116,32 @@ class ManagerTest extends \Test\TestCase {
 			->setMethods(['canShare', 'sendMailNotification'])
 			->getMock();
 
-		$share = $this->createShare(null, \OCP\Share::SHARE_TYPE_EMAIL, null, null, null, null, null);
+		$file = $this->createMock(File::class);
+		$file->method('getId')->willReturn('fileId');
+		$file->method('getName')->willReturn('fileName');
+
+		$share = $this->createShare(null, \OCP\Share::SHARE_TYPE_EMAIL, $file, "user0@server.com", "sharer", null, null);
 
 		$manager->expects($this->once())
 			->method('canShare')
 			->with($share)
 			->willReturn(true);
 
-		$manager->expects($this->never())
-			->method('sendMailNotification');
+		$this->urlGenerator
+			->method('linkToRouteAbsolute')
+			->with('files.viewcontroller.showFile',
+				   ['fileid' => 'fileId'])
+			->willReturn('absolute/route/to/file');
 
-		try {
-			$manager->resendMailNotification($share);
+		$manager->expects($this->once())
+			->method('sendMailNotification')
+			->with($this->l,
+				   'fileName',
+				   'absolute/route/to/file',
+				   'sharer',
+				   'user0@server.com');
 
-			$this->fail('InvalidArgumentException was not thrown');
-		} catch (\InvalidArgumentException $e) {
-		}
+		$manager->resendMailNotification($share);
 	}
 
 	public function testGetSharesBy() {
