@@ -266,7 +266,7 @@
 								emailsLength = emails.length;
 								for (j = 0; j < emailsLength; j++) {
 									if (emails[j].value.shareWith === share.share_with) {
-										remotes.splice(j, 1);
+										emails.splice(j, 1);
 										break;
 									}
 								}
