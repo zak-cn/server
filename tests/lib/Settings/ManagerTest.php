@@ -301,7 +301,7 @@ class ManagerTest extends TestCase {
 			->will($this->returnValue([]));
 
 		$this->assertEquals([
-			0 => [new Sharing($this->config)],
+			0 => [new Sharing($this->config, $this->l10n)],
 		], $this->manager->getAdminSettings('sharing'));
 	}
 
