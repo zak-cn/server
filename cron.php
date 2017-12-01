@@ -34,9 +34,9 @@
  *
  */
 
-// Show warning if a PHP version below 5.6.0 is used
-if (version_compare(PHP_VERSION, '5.6.0') === -1) {
-	echo 'This version of Nextcloud requires at least PHP 5.6.0<br/>';
+// Show warning if a PHP version below 7.0 is used
+if (version_compare(PHP_VERSION, '7.0') === -1) {
+	echo 'This version of Nextcloud requires at least PHP 7.0<br/>';
 	echo 'You are currently running ' . PHP_VERSION . '. Please update your PHP version.';
 	return;
 }
