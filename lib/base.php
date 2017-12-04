@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2016, ownCloud, Inc.
  *
@@ -413,7 +415,7 @@ class OC {
 
 	public static function initSession() {
 		// prevents javascript from accessing php session cookies
-		ini_set('session.cookie_httponly', true);
+		ini_set('session.cookie_httponly', 'true');
 
 		// set the cookie path to the Nextcloud directory
 		$cookie_path = OC::$WEBROOT ? : '/';
@@ -484,7 +486,7 @@ class OC {
 	 */
 	public static function setRequiredIniValues() {
 		@ini_set('default_charset', 'UTF-8');
-		@ini_set('gd.jpeg_ignore_warning', 1);
+		@ini_set('gd.jpeg_ignore_warning', '1');
 	}
 
 	/**
@@ -616,8 +618,8 @@ class OC {
 
 		// Don't display errors and log them
 		error_reporting(E_ALL | E_STRICT);
-		@ini_set('display_errors', 0);
-		@ini_set('log_errors', 1);
+		@ini_set('display_errors', '0');
+		@ini_set('log_errors', '1');
 
 		if(!date_default_timezone_set('UTC')) {
 			throw new \RuntimeException('Could not set timezone to UTC');
@@ -631,8 +633,8 @@ class OC {
 		if (strpos(@ini_get('disable_functions'), 'set_time_limit') === false) {
 			@set_time_limit(3600);
 		}
-		@ini_set('max_execution_time', 3600);
-		@ini_set('max_input_time', 3600);
+		@ini_set('max_execution_time', '3600');
+		@ini_set('max_input_time', '3600');
 
 		//try to set the maximum filesize to 10G
 		@ini_set('upload_max_filesize', '10G');
